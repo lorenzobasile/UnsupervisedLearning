@@ -6,7 +6,7 @@ def normalize(x):
 def PCA(x, d):
     N=x.shape[0]
     cov=x.T@x/N
-    eigenvalues, eigenvectors=np.linalg.eig(cov)
+    eigenvalues, eigenvectors=np.linalg.eigh(cov)
     sorted_indices = np.argsort(-eigenvalues)
     eigenvalues = eigenvalues[sorted_indices]
     eigenvectors = eigenvectors[:,sorted_indices]
@@ -18,8 +18,8 @@ def MDS(delta, d):
     N=delta.shape[0]
     all_distances=np.sum(delta, axis=0)
     pair_sums=np.stack([all_distances for i in range(N)], axis=0)+np.stack([all_distances for i in range(N)], axis=1)
-    G=-1/2*(delta+1/(N**2)*np.sum(delta)-1/N*pair_sums)
-    eigenvalues, eigenvectors=np.linalg.eig(G)
+    G=-1/2*(delta+np.mean(delta)-1/N*pair_sums)
+    eigenvalues, eigenvectors=np.linalg.eigh(G)
     sorted_indices = np.argsort(-eigenvalues)
     eigenvalues = eigenvalues[sorted_indices]
     eigenvectors = eigenvectors[:,sorted_indices]
